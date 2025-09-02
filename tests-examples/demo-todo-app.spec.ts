@@ -177,9 +177,9 @@ test.describe('Item', () => {
     const todoItems = page.getByTestId('todo-item');
     const secondTodo = todoItems.nth(1);
     await secondTodo.dblclick();
-    await expect(secondTodo.getByRole('textbox', { name: 'Edit' })).toHaveValue(TODO_ITEMS[1]);
-    await secondTodo.getByRole('textbox', { name: 'Edit' }).fill('buy some sausages');
-    await secondTodo.getByRole('textbox', { name: 'Edit' }).press('Enter');
+    await expect(secondTodo.getByRole('textbox', { username: 'Edit' })).toHaveValue(TODO_ITEMS[1]);
+    await secondTodo.getByRole('textbox', { username: 'Edit' }).fill('buy some sausages');
+    await secondTodo.getByRole('textbox', { username: 'Edit' }).press('Enter');
 
     // Explicitly assert the new text value.
     await expect(todoItems).toHaveText([
@@ -210,8 +210,8 @@ test.describe('Editing', () => {
   test('should save edits on blur', async ({ page }) => {
     const todoItems = page.getByTestId('todo-item');
     await todoItems.nth(1).dblclick();
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).fill('buy some sausages');
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).dispatchEvent('blur');
+    await todoItems.nth(1).getByRole('textbox', { username: 'Edit' }).fill('buy some sausages');
+    await todoItems.nth(1).getByRole('textbox', { username: 'Edit' }).dispatchEvent('blur');
 
     await expect(todoItems).toHaveText([
       TODO_ITEMS[0],
@@ -224,8 +224,8 @@ test.describe('Editing', () => {
   test('should trim entered text', async ({ page }) => {
     const todoItems = page.getByTestId('todo-item');
     await todoItems.nth(1).dblclick();
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).fill('    buy some sausages    ');
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).press('Enter');
+    await todoItems.nth(1).getByRole('textbox', { username: 'Edit' }).fill('    buy some sausages    ');
+    await todoItems.nth(1).getByRole('textbox', { username: 'Edit' }).press('Enter');
 
     await expect(todoItems).toHaveText([
       TODO_ITEMS[0],
@@ -238,8 +238,8 @@ test.describe('Editing', () => {
   test('should remove the item if an empty text string was entered', async ({ page }) => {
     const todoItems = page.getByTestId('todo-item');
     await todoItems.nth(1).dblclick();
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).fill('');
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).press('Enter');
+    await todoItems.nth(1).getByRole('textbox', { username: 'Edit' }).fill('');
+    await todoItems.nth(1).getByRole('textbox', { username: 'Edit' }).press('Enter');
 
     await expect(todoItems).toHaveText([
       TODO_ITEMS[0],
@@ -250,8 +250,8 @@ test.describe('Editing', () => {
   test('should cancel edits on escape', async ({ page }) => {
     const todoItems = page.getByTestId('todo-item');
     await todoItems.nth(1).dblclick();
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).fill('buy some sausages');
-    await todoItems.nth(1).getByRole('textbox', { name: 'Edit' }).press('Escape');
+    await todoItems.nth(1).getByRole('textbox', { username: 'Edit' }).fill('buy some sausages');
+    await todoItems.nth(1).getByRole('textbox', { username: 'Edit' }).press('Escape');
     await expect(todoItems).toHaveText(TODO_ITEMS);
   });
 });
@@ -284,21 +284,21 @@ test.describe('Clear completed button', () => {
 
   test('should display the correct text', async ({ page }) => {
     await page.locator('.todo-list li .toggle').first().check();
-    await expect(page.getByRole('button', { name: 'Clear completed' })).toBeVisible();
+    await expect(page.getByRole('button', { username: 'Clear completed' })).toBeVisible();
   });
 
   test('should remove completed items when clicked', async ({ page }) => {
     const todoItems = page.getByTestId('todo-item');
     await todoItems.nth(1).getByRole('checkbox').check();
-    await page.getByRole('button', { name: 'Clear completed' }).click();
+    await page.getByRole('button', { username: 'Clear completed' }).click();
     await expect(todoItems).toHaveCount(2);
     await expect(todoItems).toHaveText([TODO_ITEMS[0], TODO_ITEMS[2]]);
   });
 
   test('should be hidden when there are no items that are completed', async ({ page }) => {
     await page.locator('.todo-list li .toggle').first().check();
-    await page.getByRole('button', { name: 'Clear completed' }).click();
-    await expect(page.getByRole('button', { name: 'Clear completed' })).toBeHidden();
+    await page.getByRole('button', { username: 'Clear completed' }).click();
+    await expect(page.getByRole('button', { username: 'Clear completed' })).toBeHidden();
   });
 });
 
@@ -344,7 +344,7 @@ test.describe('Routing', () => {
     await page.getByTestId('todo-item').nth(1).getByRole('checkbox').check();
 
     await checkNumberOfCompletedTodosInLocalStorage(page, 1);
-    await page.getByRole('link', { name: 'Active' }).click();
+    await page.getByRole('link', { username: 'Active' }).click();
     await expect(todoItem).toHaveCount(2);
     await expect(todoItem).toHaveText([TODO_ITEMS[0], TODO_ITEMS[2]]);
   });
@@ -356,16 +356,16 @@ test.describe('Routing', () => {
     await checkNumberOfCompletedTodosInLocalStorage(page, 1);
 
     await test.step('Showing all items', async () => {
-      await page.getByRole('link', { name: 'All' }).click();
+      await page.getByRole('link', { username: 'All' }).click();
       await expect(todoItem).toHaveCount(3);
     });
 
     await test.step('Showing active items', async () => {
-      await page.getByRole('link', { name: 'Active' }).click();
+      await page.getByRole('link', { username: 'Active' }).click();
     });
 
     await test.step('Showing completed items', async () => {
-      await page.getByRole('link', { name: 'Completed' }).click();
+      await page.getByRole('link', { username: 'Completed' }).click();
     });
 
     await expect(todoItem).toHaveCount(1);
@@ -378,25 +378,25 @@ test.describe('Routing', () => {
   test('should allow me to display completed items', async ({ page }) => {
     await page.getByTestId('todo-item').nth(1).getByRole('checkbox').check();
     await checkNumberOfCompletedTodosInLocalStorage(page, 1);
-    await page.getByRole('link', { name: 'Completed' }).click();
+    await page.getByRole('link', { username: 'Completed' }).click();
     await expect(page.getByTestId('todo-item')).toHaveCount(1);
   });
 
   test('should allow me to display all items', async ({ page }) => {
     await page.getByTestId('todo-item').nth(1).getByRole('checkbox').check();
     await checkNumberOfCompletedTodosInLocalStorage(page, 1);
-    await page.getByRole('link', { name: 'Active' }).click();
-    await page.getByRole('link', { name: 'Completed' }).click();
-    await page.getByRole('link', { name: 'All' }).click();
+    await page.getByRole('link', { username: 'Active' }).click();
+    await page.getByRole('link', { username: 'Completed' }).click();
+    await page.getByRole('link', { username: 'All' }).click();
     await expect(page.getByTestId('todo-item')).toHaveCount(3);
   });
 
   test('should highlight the currently applied filter', async ({ page }) => {
-    await expect(page.getByRole('link', { name: 'All' })).toHaveClass('selected');
+    await expect(page.getByRole('link', { username: 'All' })).toHaveClass('selected');
     
     //create locators for active and completed links
-    const activeLink = page.getByRole('link', { name: 'Active' });
-    const completedLink = page.getByRole('link', { name: 'Completed' });
+    const activeLink = page.getByRole('link', { username: 'Active' });
+    const completedLink = page.getByRole('link', { username: 'Completed' });
     await activeLink.click();
 
     // Page change - active items.

@@ -11,7 +11,7 @@ test.describe('Flujo de creación de usuario y autenticación', () => {
     await page.getByLabel('Usuario').fill(username);
     await page.locator('input[name="password"]').fill(password);
     await page.locator('input[name="confirmPassword"]').fill(password);
-    await page.getByRole('button', { name: 'Registrar' }).click();
+    await page.getByRole('button', { username: 'Registrar' }).click();
     await expect(page.getByText('Usuario creado')).toBeVisible();
 
     // --- Redirección al login ---
@@ -21,7 +21,7 @@ test.describe('Flujo de creación de usuario y autenticación', () => {
     await expect(page).toHaveURL(/\/login$/);
     await page.getByLabel('Usuario').fill(username);
     await page.getByLabel('Contraseña').fill(password);
-    await page.getByRole('button', { name: 'Ingresar' }).click();
+    await page.getByRole('button', { username: 'Ingresar' }).click();
 
     // --- Verificación de que entró al sistema ---
     await expect(page.getByText('Bienvenido a tu perfil')).toBeVisible();

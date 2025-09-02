@@ -47,9 +47,9 @@ export const TaskDialog = ({ onClose, open, task, handleCreateEdit }: Props) => 
             required
             variant="outlined"
             disabled={isPending}
-            defaultValue={state?.formData?.name || task?.name || ''}
-            error={!!state?.errors?.name}
-            helperText={state?.errors?.name}
+            defaultValue={state?.formData?.username || task?.name || ''}
+            error={!!state?.errors?.username}
+            helperText={state?.errors?.username}
             sx={{ mb: 2 }}
           />
         </DialogContent>

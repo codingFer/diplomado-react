@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useActionState } from 'react';
+import {useActionState, useState} from 'react';
 import { shemaLogin, type LoginFormValues } from '../../models';
 import type { ActionState } from '../../interfaces';
 import { createInitialState, hanleZodError } from '../../helpers';
@@ -24,6 +24,11 @@ export const LoginPage = () => {
   const { login } = useAuth();
   const { showAlert } = useAlert();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const loginApi = async (
     _: LoginActionState | undefined,
@@ -102,18 +107,35 @@ export const LoginPage = () => {
               error={!!state?.errors?.username}
               helperText={state?.errors?.username}
             />
-            <TextField
-              name="password"
-              margin="normal"
-              required
-              fullWidth
-              label="Password"
-              type="password"
-              disabled={isPending}
-              defaultValue={state?.formData?.password}
-              error={!!state?.errors?.password}
-              helperText={state?.errors?.password}
-            />
+            <div style={{ position: 'relative' }}>
+              <TextField
+                  name="password"
+                  margin="normal"
+                  required
+                  fullWidth
+                  label="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  disabled={isPending}
+                  defaultValue={state?.formData?.password}
+                  error={!!state?.errors?.password}
+                  helperText={state?.errors?.password}
+              />
+              <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  style={{
+                    position: 'absolute',
+                    right: '5px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+              >
+                {showPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
             <Button
               type="submit"
               fullWidth

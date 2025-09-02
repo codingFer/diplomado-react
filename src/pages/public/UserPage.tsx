@@ -12,11 +12,21 @@ import { schemaUser, type UserFormValues } from '../../models';
 import { createInitialState, hanleZodError } from '../../helpers';
 import { useAlert, useAxios } from '../../hooks';
 import { Link, useNavigate } from 'react-router-dom';
-import { useActionState } from 'react';
+import {useActionState, useState} from 'react';
 
 type UserActionState = ActionState<UserFormValues>;
 const initialState = createInitialState<UserFormValues>();
 export const UserPage = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   const axios = useAxios();
   const { showAlert } = useAlert();
   const navigate = useNavigate();
@@ -94,30 +104,69 @@ export const UserPage = () => {
               error={!!state?.errors?.username}
               helperText={state?.errors?.username}
             />
-            <TextField
-              name="password"
-              margin="normal"
-              required
-              fullWidth
-              label="Password"
-              type="password"
-              disabled={isPending}
-              defaultValue={state?.formData?.password}
-              error={!!state?.errors?.password}
-              helperText={state?.errors?.password}
-            />
-            <TextField
-              name="confirmPassword"
-              margin="normal"
-              required
-              fullWidth
-              label="Repetir password"
-              type="password"
-              disabled={isPending}
-              defaultValue={state?.formData?.confirmPassword}
-              error={!!state?.errors?.confirmPassword}
-              helperText={state?.errors?.confirmPassword}
-            />
+
+
+            <div style={{ position: 'relative' }}>
+                <TextField
+                    name="password"
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    disabled={isPending}
+                    defaultValue={state?.formData?.password}
+                    error={!!state?.errors?.password}
+                    helperText={state?.errors?.password}
+                />
+              <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  style={{
+                    position: 'absolute',
+                    right: '5px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                  }}
+              >
+                {showPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
+
+              <div style={{ position: 'relative' }}>
+                  <TextField
+                      name="confirmPassword"
+                      margin="normal"
+                      required
+                      fullWidth
+                      label="Repetir password"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      disabled={isPending}
+                      defaultValue={state?.formData?.confirmPassword}
+                      error={!!state?.errors?.confirmPassword}
+                      helperText={state?.errors?.confirmPassword}
+                  />
+                  <button
+                      type="button"
+                      onClick={toggleConfirmPasswordVisibility}
+                      style={{
+                          position: 'absolute',
+                          right: '5px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                      }}
+                  >
+                      {showConfirmPassword ? '🙈' : '👁️'}
+                  </button>
+              </div>
+
+
             <Button
               type="submit"
               fullWidth

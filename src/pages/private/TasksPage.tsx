@@ -127,8 +127,8 @@ export const TasksPage = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      {/* Header con titulo y boton agregar */}
-      <TaskHeader handleOpenCreateDialog={handleOpenCreateDialog} />
+      {/* HeaderTable con titulo y boton agregar */}
+      <TaskHeader  handleOpenCreateDialog={handleOpenCreateDialog} />
 
       {/* Barra de herramientas con filtros y busquedas */}
       <TaskFilter
